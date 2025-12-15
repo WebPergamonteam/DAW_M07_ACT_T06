@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  web:
+    image: php:8.1-apache
+    container_name: grupos_musicales_web
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    command: >
+      bash -c "a2enmod rewrite
+      && sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/sites-available/000-default.conf
+      && apache2-foreground"
+    networks:
+      - grupos_network
+
+  db:
+    image: mariadb:10.11
+    container_name: grupos_musicales_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: grupos_musicales
+      MYSQL_USER: grupos_user
+      MYSQL_PASSWORD: grupos_pass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - grupos_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: grupos_musicales_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - grupos_network
+
+volumes:
+  db_data:
+
+networks:
+  grupos_network:
+    driver: bridge
+

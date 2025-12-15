@@ -1,0 +1,17 @@
+# NuSOAP library (debe descargarse manualmente)
+lib/nusoap.php
+
+# Archivos de configuración sensibles
+config.local.php
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
