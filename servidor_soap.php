@@ -4,7 +4,6 @@ error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
 
 
 ob_start();
-
 require_once('lib/nusoap.php');
 require_once('config.php');
 

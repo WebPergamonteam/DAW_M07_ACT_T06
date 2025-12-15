@@ -27,7 +27,7 @@ if ($is_ddev) {
     define('DB_NAME', 'db');
 } else {
     define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
+    define('DB_USER', 'admin');
     define('DB_PASS', '');
     define('DB_NAME', 'db');
 }
